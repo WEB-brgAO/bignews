@@ -39,5 +39,38 @@
   </div>
 
 </body>
+<script>
+  $('.input_sub').click(function(e) {
+    // 阻止默认事件
+    e.preventDefault();
+    var username = $('.input_txt').val().trim();
+    var password = $('.input_pass').val().trim();
+    if (username === '' || password === '') {
+      alert('哥们，写点东西吧 滑稽');
+      return;
+    }
+    $.ajax({
+      url: 'http://localhost:8080/api/v1/admin/user/login',
+      type: 'post',
+      data: {
+        username: username,
+        password: password,
+      },
+      // dataType: 'json',
+      success: function(res) {
+        if (res.code == 400) {
+          alert(res.msg)
+        } else if (res.code == 200) {
+          console.log(res);
+          window.localStorage.setItem('token', res.token);
+          window.location.href = 'index.html';
+          // window.localStorage
+        }
+
+      }
+    })
+
+  })
+</script>
 
 </html>
