@@ -76,8 +76,8 @@
       url: BigNew.user_detail,
       success: function(res) {
         // 改变input val值
-        $('#inputEmail1').val(res.data.nickname);
-        // $('#inputEmail2').val(res.data.);
+        $('#inputEmail1').val(res.data.username);
+        $('#inputEmail2').val(res.data.nickname);
         $('#inputEmail3').val(res.data.email);
         $('#inputEmail3').val(res.data.email);
         $('#inputEmail4').val(res.data.password);
@@ -86,10 +86,45 @@
       }
     });
     // 实先图片自加载
+    // 给文件域增加改变事件
     $('#exampleInputFile').change(function() {
+      // 获取当前的url临时地址
       var url = URL.createObjectURL(this.files[0]);
-      console.log(url);
+      // console.log(url);
+      // 改变img 的src属性 实先图片自加载
       $('.user_pic').attr('src', url);
+    });
+
+    // 用户信息更改
+    // 给按钮添加店家事件
+    $('.btn-edit').click(function(e) {
+      // 去除butto默认事件
+      e.preventDefault();
+      // 创建fromdData
+      // 里面跟着dom元素form
+      var data = new FormData(document.querySelector('form'));
+      // console.log(data);
+      // 调用接口
+      $.ajax({
+
+        url: BigNew.user_edit,
+        type: 'post',
+        data: data,
+        // 不设置类型
+        contentType: false,
+        // 不处理数据
+        processData: false,
+        success: function(res) {
+          // 如果成功 刷新父元素的页面
+          if (res.code === 200) {
+            // alert(res.msg);
+            // window.parent.location.reload();
+            window.parent.location.reload();
+          }
+
+        }
+      })
+
     })
   })
 </script>
