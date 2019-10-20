@@ -50,6 +50,34 @@
       </table>
     </div>
   </div>
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">新增文章类别</h4>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="exampleInputEmail1">name</label>
+              <input type="email" class="form-control my_name" id="exampleInputEmail1">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1">slug</label>
+              <input type="password" class="form-control my_slug" id="exampleInputPassword1">
+            </div>
+
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">删除</button>
+          <button type="button" class="btn btn-primary">增加</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 <script type="text/html" id="cateTem">
   {{each data}}
@@ -58,20 +86,59 @@
     <td>{{$value.slug}}</td>
     <td class="text-center">
       <a href="javascript:void(0);" data-toggle="modal" class=" btn btn-info btn-xs">编辑</a>
-      <a href="javascript:void(0);" class="btn btn-danger btn-xs">删除</a>
+      <a href="javascript:void(0);" data_id='{{$value.id}}' class="btn btn-danger btn-xs">删除</a>
     </td>
   </tr>
   {{/each}}
 </script>
 <script>
-  $.ajax({
-    url: BigNew.category_list,
-    success: function(res) {
-      console.log(res);
-      var html = template('cateTem', res);
-      $('tbody').html(html)
+  $(function() {
 
+    function add() {
+      $.ajax({
+        url: BigNew.category_list,
+        success: function(res) {
+          //   console.log(res);
+          //   模板引擎
+          var html = template('cateTem', res);
+          $('tbody').html(html);
+        }
+      });
     }
+    add();
+    console.log(BigNew.category_add);
+
+    $('.btn-primary').click(function() {
+
+
+      // 增加类型
+      //   获取值
+      var name = $('.my_name').val();
+      var slug = $('.my_slug').val();
+      //   console.log(name, slug);
+      // 调用接口
+      $.ajax({
+        url: BigNew.category_add,
+        data: {
+          name: name,
+          slug: slug,
+        },
+        type: 'post',
+        success: function(res) {
+          //   console.log(res);
+          if (res.code === 201) {
+            //   点击退出
+            $("#myModal").modal("hide");
+            add();
+          }
+
+        }
+
+      })
+    })
+
+
+
   })
 </script>
 
