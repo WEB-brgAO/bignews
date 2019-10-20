@@ -48,8 +48,8 @@
             <!-- 给label标签的for属性赋值,值是input标签的id,那这样的话点击label就相当于点击了input -->
             <br>
             <label for="exampleInputFile">
-                            <img src="./images/uploads_icon.jpg" style="height: 50px;" alt="">
-                        </label>
+               <img src="./images/uploads_icon.jpg" style="height: 50px;" alt="">
+            </label>
           </div>
         </div>
 
@@ -69,20 +69,28 @@
   </div>
 </body>
 <script>
-  //   console.log(bigNew.user_datail);
-
-  $.ajax({
-    url: 'http://localhost:8080/api/v1/admin/user/detail',
-    success: function(res) {
-      $('#inputEmail1').val(res.data.nickname);
-      // $('#inputEmail2').val(res.data.);
-      $('#inputEmail3').val(res.data.email);
-      $('#inputEmail3').val(res.data.email);
-      $('#inputEmail4').val(res.data.password);
-      $('.user_pic').attr('src', res.data.userPic)
-
-
-    }
+  $(function() {
+    // 实现用户信息
+    // 调用接口
+    $.ajax({
+      url: BigNew.user_detail,
+      success: function(res) {
+        // 改变input val值
+        $('#inputEmail1').val(res.data.nickname);
+        // $('#inputEmail2').val(res.data.);
+        $('#inputEmail3').val(res.data.email);
+        $('#inputEmail3').val(res.data.email);
+        $('#inputEmail4').val(res.data.password);
+        // 给img src属性更改
+        $('.user_pic').attr('src', res.data.userPic)
+      }
+    });
+    // 实先图片自加载
+    $('#exampleInputFile').change(function() {
+      var url = URL.createObjectURL(this.files[0]);
+      console.log(url);
+      $('.user_pic').attr('src', url);
+    })
   })
 </script>
 
